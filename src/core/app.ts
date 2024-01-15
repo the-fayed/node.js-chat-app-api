@@ -1,5 +1,6 @@
-import express from 'express';
 import * as dotenv from 'dotenv';
+import express from 'express';
+import morgan from 'morgan';
 
 import { globalErrorHandler } from '../shared/middlewares/global-error-handling';
 import { routesMounter } from '../modules/routes-mounter';
@@ -19,6 +20,15 @@ dbConnection();
  */
 app.use(express.json({ limit: '30kb' }));
 app.use(express.urlencoded({ extended: false, limit: '30kb' }));
+
+/**
+ * logger middleware for development environment
+ * package name: morgan
+ */
+if (process.env.NODE_ENV === 'Development') {
+  app.use(morgan('dev'))
+  console.log(`Environment: ${process.env.NODE_ENV}`);
+}
 
 /**
  * mount routes
