@@ -1,4 +1,5 @@
 package-lock.json
 node_modules
 .env
-src/modules
+src/modules/auth
+src/shared/middlewares/authorization.ts
