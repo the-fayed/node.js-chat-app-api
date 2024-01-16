@@ -1,4 +1,4 @@
 package-lock.json
 node_modules
 .env
-src/shared/middlewares/authorization.ts
+dist

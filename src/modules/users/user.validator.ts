@@ -60,17 +60,6 @@ export const validateGetSpecificUser = [
 ];
 
 export const validateUpdateUserData = [
-  check("id")
-    .notEmpty()
-    .withMessage("User id is required!")
-    .isMongoId()
-    .withMessage("Invalid user id!")
-    .custom(async (value: string) => {
-      const user = await User.findById(value);
-      if (!user) {
-        throw new Error(`No user found with id ${value}!`);
-      }
-    }),
   check("username")
     .optional()
     .isString()
@@ -97,17 +86,6 @@ export const validateUpdateUserData = [
 ];
 
 export const validateUpdateUserPassword = [
-  check("id")
-    .notEmpty()
-    .withMessage("User id is required!")
-    .isMongoId()
-    .withMessage("Invalid user id!")
-    .custom(async (value: string) => {
-      const user = await User.findById(value);
-      if (!user) {
-        throw new Error(`No user found with id ${value}!`);
-      }
-    }),
   check("password")
     .notEmpty()
     .withMessage("Password is required!")

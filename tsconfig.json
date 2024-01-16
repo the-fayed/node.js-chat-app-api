@@ -1,12 +1,14 @@
 {
   "exclude": ["node_modules"],
+  "include": ["src/**/*", "src/**/**/*"],
   "compilerOptions": {
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "outDir": "dist",
-    "baseUrl": "src",
+    "target": "ES2021",
+    "baseUrl": "./",
+    "outDir": "./dist",
     "sourceMap": true,
     "noImplicitAny": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
   }
 }

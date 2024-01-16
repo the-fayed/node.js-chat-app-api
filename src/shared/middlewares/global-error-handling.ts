@@ -16,17 +16,13 @@ const sendErrorOnDevelopment = (error: ApiError, res: Response): void => {
   });
 };
 
-const invalidJwtSignature = (): ApiError => new ApiError('Invalid JWT Signature!', 401);
-const expiredJwrToken = (): ApiError => new ApiError('Expired Token!', 401);
-
-export const globalErrorHandler = (error: ApiError, req: Request, res: Response, next: NextFunction):void => {
+export const globalErrorHandler = (error: ApiError, req: Request, res: Response, next: NextFunction): void => {
   error.statuscode = error.statuscode || 500;
   error.status = error.status || 'fail';
+  console.log(error.name);
   if (process.env.NODE_ENV === 'Development') {
-    sendErrorOnDevelopment(error, res);
+    return sendErrorOnDevelopment(error, res);
   } else {
-    if (error.name === 'JsonWebTokenError') invalidJwtSignature();
-    if (error.name === 'TokenExpiredError') expiredJwrToken();
-    sendErrorOnProduction(error, res);
+    return sendErrorOnProduction(error, res);
   };
 }
