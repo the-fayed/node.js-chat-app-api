@@ -1,29 +1,16 @@
 import asyncHandler from "express-async-handler";
 
-import { CreateUser, SanitizedUser, UpdateUserData, UpdateUserPassword } from "./user.interface";
+import { SanitizedUser, UpdateUserData, UpdateUserPassword } from "./user.interface";
 import { ApiError } from "../../shared/utils/api-error";
 import { AuthRequest } from '../auth/auth.interface';
 import { UserService } from "./user.service";
 
 class UserController {
   private userService: UserService;
+
   constructor() {
     this.userService = new UserService();
   }
-
-  createUser = asyncHandler(async (req, res, next): Promise<void> => {
-    const createUserData: CreateUser = {
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password,
-      avatar: req.file?.path
-    };
-    const result: SanitizedUser = await this.userService.createUser(createUserData);
-    res.status(201).json({
-      status: "success",
-      data: result,
-    });
-  });
 
   getAllUsers = asyncHandler(async (req, res, next): Promise<void> => {
     const result: SanitizedUser[] = await this.userService.getAllUsers();
@@ -36,8 +23,8 @@ class UserController {
     });
   });
 
-  getSpecificUser = asyncHandler(async (req, res, next): Promise<void> => {
-    const result: SanitizedUser = await this.userService.getSpecificUser(req.params.id);
+  getUserById = asyncHandler(async (req, res, next): Promise<void> => {
+    const result = await this.userService.getUserById(req.params.id);
     res.status(200).json({ status: "success", data: result });
   });
 

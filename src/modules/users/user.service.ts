@@ -38,7 +38,7 @@ export class UserService implements IUserService {
     return sanitizedUsers;
   }
 
-  async getSpecificUser(id: string): Promise<SanitizedUser> {
+  async getUserById(id: string): Promise<SanitizedUser> {
     const user = (await User.findById(id)) as IUser;
     if (!user) {
       throw new ApiError("User not found!", 404);
@@ -46,10 +46,12 @@ export class UserService implements IUserService {
     return this.sanitizeData.sanitizeUser(user);
   }
 
-  async getUserByEmailOrUsername(emailOrUsername: string): Promise<IUser> {
-    const user = (await User.findOne({ $or: [{ email: emailOrUsername }, { username: emailOrUsername }] })) as IUser;
+  async getUserByEmailOrUsername(searchObj: string): Promise<IUser> {
+    const user = await User.findOne({
+      $or: [{ email: searchObj }, { username: searchObj }]
+    }) as IUser;
     if (!user) {
-      throw new ApiError("User not found!", 404);
+      throw new ApiError('User not found!', 404);
     }
     return user;
   }
