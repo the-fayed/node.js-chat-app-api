@@ -3,7 +3,7 @@ import * as bcrypt from "bcrypt";
 import { IAuthService, LoginData, AuthResponse, SignupData } from "./auth.interface";
 import { generateAccessToken } from "../../shared/utils/code-factor";
 import { SanitizeData } from "../../shared/utils/sanitize-data";
-import { ApiError } from "../../shared/utils/api-error";
+import ApiError from "../../shared/utils/api-error";
 import { UserService } from "../users/user.service";
 
 export class AuthService implements IAuthService {

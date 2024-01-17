@@ -1,7 +1,7 @@
 import { Request } from "express";
 import multer from "multer";
 
-import { ApiError } from '../utils/api-error';
+import ApiError from '../utils/api-error';
 
 
 const multerOpts = () => {

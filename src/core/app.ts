@@ -2,10 +2,10 @@ import * as dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
 
-import { globalErrorHandler } from '../shared/middlewares/global-error-handling';
+import globalErrorHandler from '../shared/middlewares/global-error-handling';
 import { routesMounter } from '../modules/routes-mounter';
 import { dbConnection } from '../config/db-connection';
-import { ApiError } from '../shared/utils/api-error';
+import ApiError from '../shared/utils/api-error';
 
 dotenv.config();
 const app: express.Application = express();

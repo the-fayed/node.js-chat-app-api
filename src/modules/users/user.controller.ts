@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
 
 import { SanitizedUser, UpdateUserData, UpdateUserPassword } from "./user.interface";
-import { ApiError } from "../../shared/utils/api-error";
+import ApiError from "../../shared/utils/api-error";
 import { AuthRequest } from '../auth/auth.interface';
 import { UserService } from "./user.service";
 

@@ -1,7 +1,7 @@
 import { CreateUser, IUser, IUserService, SanitizedUser, UpdateUserData, UpdateUserPassword } from "./user.interface";
 import { uploadToCloudinary } from "../../shared/utils/code-factor";
 import { SanitizeData } from "../../shared/utils/sanitize-data";
-import { ApiError } from "../../shared/utils/api-error";
+import ApiError from "../../shared/utils/api-error";
 import { UserModel as User } from "./user.model";
 
 export class UserService implements IUserService {

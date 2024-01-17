@@ -1,13 +1,14 @@
 import { NextFunction, Response } from "express";
+import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
 
 import { AuthRequest, Decoded } from "../../modules/auth/auth.interface";
 import { UserModel as User } from "../../modules/users/user.model";
 import { IUser } from "../../modules/users/user.interface";
-import { ApiError } from "../../shared/utils/api-error";
+import ApiError from "../../shared/utils/api-error";
 
 export const isAuthorized = () => {
-  return async (req: AuthRequest, res: Response, next: NextFunction) => {
+  return asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
     if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
       const token = req.headers.authorization.split(" ")[1];
       if (!token) {
@@ -26,5 +27,5 @@ export const isAuthorized = () => {
     } else {
       return next(new ApiError("You are not authorized to perform this action!", 401));
     }
-  };
+  });
 };

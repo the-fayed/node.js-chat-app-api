@@ -3,9 +3,9 @@ import jwt from "jsonwebtoken";
 
 import { Payload } from '../../modules/auth/auth.interface';
 import cloudinary from "../../config/cloudinary";
-import { ApiError } from "./api-error";
+import ApiError from "./api-error";
 
-export const uploadToCloudinary = async (filename: string, opt: UploadApiOptions) => {
+export const uploadToCloudinary = async (filename: string, opt: UploadApiOptions): Promise<string> => {
   try {
     return (await cloudinary.uploader.upload(filename, opt)).url;
   } catch (error) {
