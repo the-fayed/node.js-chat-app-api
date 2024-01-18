@@ -22,6 +22,7 @@ export interface AuthResponse {
 
 export interface IAuthService {
   login: (data: LoginData) => Promise<AuthResponse>;
+  signup: (data: SignupData) => Promise<AuthResponse>;
 }
 
 export interface AuthRequest extends Request {
