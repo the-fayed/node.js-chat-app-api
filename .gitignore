@@ -2,4 +2,3 @@ package-lock.json
 node_modules
 .env
 dist
-src/core/socket-io.ts

@@ -13,3 +13,5 @@ process.on('unhandledRejection', (error: Error) => {
     process.exit(1);
   })
 })
+
+export default server;
