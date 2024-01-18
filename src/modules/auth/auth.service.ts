@@ -16,32 +16,40 @@ export class AuthService implements IAuthService {
   }
 
   async signup(data: SignupData): Promise<AuthResponse> {
-    const user = await this.userService.createUser(data);
-    if (!user) {
-      throw new ApiError("Error while creating your account, please try again later!", 500);
+    try {
+      const user = await this.userService.createUser(data);
+      if (!user) {
+        throw new ApiError("Error while creating your account, please try again later!", 500);
+      }
+      const token = generateAccessToken({ userId: user.id });
+      return {
+        user: user,
+        accessToken: token,
+      };
+    } catch (error) {
+      throw new ApiError(error.message, 500);
     }
-    const token = generateAccessToken({ userId: user.id });
-    return {
-      user: user,
-      accessToken: token,
-    };
   }
 
   async login(data: LoginData): Promise<AuthResponse> {
-    // check if ueser exists
-    const user = data.email
-      ? await this.userService.getUserByEmailOrUsername(data.email)
-      : await this.userService.getUserByEmailOrUsername(data.username);
-    if (!user) {
-      throw new ApiError("Invalid credentials!", 401);
+    try {
+      // check if user exists
+      const user = data.email
+        ? await this.userService.getUserByEmailOrUsername(data.email)
+        : await this.userService.getUserByEmailOrUsername(data.username);
+      if (!user) {
+        throw new ApiError("Invalid credentials!", 401);
+      }
+      // check if the password matches
+      const passwordMatch = await bcrypt.compare(data.password, user.password);
+      if (!passwordMatch) {
+        throw new ApiError("Invalid credentials!", 401);
+      }
+      // preparing the response data
+      const token = generateAccessToken({ userId: user.id });
+      return { user: this.sanitizeData.sanitizeUser(user), accessToken: token };
+    } catch (error) {
+      throw new ApiError(error.message, 500);
     }
-    // check if the password matchs
-    const passwordMatch = await bcrypt.compare(data.password, user.password);
-    if (!passwordMatch) {
-      throw new ApiError("Invalid credentials!", 401);
-    }
-    // perparing the response data
-    const token = generateAccessToken({ userId: user.id });
-    return { user: this.sanitizeData.sanitizeUser(user), accessToken: token };
   }
 }
