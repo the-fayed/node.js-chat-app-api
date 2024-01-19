@@ -6,10 +6,15 @@ import globalErrorHandler from '../shared/middlewares/global-error-handling';
 import { routesMounter } from '../modules/routes-mounter';
 import { dbConnection } from '../config/db-connection';
 import ApiError from '../shared/utils/api-error';
+import io from "./socket-io";
+
 
 dotenv.config();
 const app: express.Application = express();
+const socketPort: number = parseInt(process.env.SOCKET_PORT as string) || 8900;
 dbConnection();
+
+
 
 /**
  * Public middlewares
@@ -35,6 +40,9 @@ if (process.env.NODE_ENV === 'Development') {
  * dist: src/modules/routes-mounter.ts
  */
 routesMounter(app);
+
+// init socket server
+io.listen(socketPort);
 
 // handling not implemented routes
 app.use('*', (req, res, next) => {

@@ -16,7 +16,7 @@ export interface IOnlineUserService {
 }
 
 export interface ISocketMessage {
-  senderId: string;
-  receiverId: string;
+  senderId: string,
+  receiverId: string,
   content: string;
 }

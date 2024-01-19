@@ -25,13 +25,14 @@ io.on("connection", async (socket) => {
   });
 
   // handling sending messages
-  socket.on("sendMessage", async (data: ISocketMessage) => {
+  socket.on("sendMessage", async ({...data}: ISocketMessage) => {
     const user = await onlineUserService.getOnlineUser(data.receiverId);
     io.to(user.socketId).emit("getMessage", { senderId: data.senderId, content: data.content });
   });
 
   // removing connection from database
   socket.on("disconnect", async () => {
+    console.log('a user disconected');
     await onlineUserService.deleteOnlineUser(socket.id);
   });
 });
