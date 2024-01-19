@@ -20,9 +20,8 @@ io.on("connection", async (socket) => {
   });
 
   // returning all online users to filter them and find every user's online friends
-  io.emit("getOnlineUsers", async () => {
-    return await onlineUserService.getAllOnlineUsers();
-  });
+  const onlineUsers = await onlineUserService.getAllOnlineUsers();
+  io.emit("getOnlineUsers", onlineUsers);
 
   // handling sending messages
   socket.on("sendMessage", async ({...data}: ISocketMessage) => {
@@ -32,7 +31,7 @@ io.on("connection", async (socket) => {
 
   // removing connection from database
   socket.on("disconnect", async () => {
-    console.log('a user disconected');
+    console.log('a user disconnected');
     await onlineUserService.deleteOnlineUser(socket.id);
   });
 });

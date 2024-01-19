@@ -7,10 +7,10 @@ export class OnlineUserService implements IOnlineUserService {
     try {
       const exists = await this.getOnlineUser(data.userId);
       if (!exists) {
-      const user = await OnlineUser.create({
-        userId: data.userId,
-        socketId: data.socketId,
-      });
+        const user = await OnlineUser.create({
+          userId: data.userId,
+          socketId: data.socketId,
+        });
       }
     } catch (error) {
       throw new ApiError(error.message, 500);
@@ -19,7 +19,7 @@ export class OnlineUserService implements IOnlineUserService {
 
   async getAllOnlineUsers(): Promise<IOnlineUser[]> {
     try {
-      const users = (await OnlineUser.find()) as IOnlineUser[];
+      const users = (await OnlineUser.find().select("userId socketId -_id")) as IOnlineUser[];
       return users;
     } catch (error) {
       throw new ApiError(error.message, 500);
@@ -28,7 +28,7 @@ export class OnlineUserService implements IOnlineUserService {
 
   async getOnlineUser(userId: string): Promise<IOnlineUser> {
     try {
-      const user = (await OnlineUser.findOne({ userId: userId })) as IOnlineUser;
+      const user = (await OnlineUser.findOne({ userId: userId }).select("userId socketId -_id")) as IOnlineUser;
       return user;
     } catch (error) {
       throw new ApiError(error.message, 500);
