@@ -1,15 +1,18 @@
+import { createServer } from 'http';
+
 import { Server } from "socket.io";
 
 import { OnlineUserService } from "../modules/online-users/online-user.service";
 import { ISocketMessage } from "../modules/online-users/online-user.interface";
-import server from "./server";
+import app from "./app";
 
 const onlineUserService = new OnlineUserService();
 
 // init socket.io server
-const io = new Server(server, { connectionStateRecovery: {} });
+const server = createServer(app);
+const io = new Server(server);
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   console.log("a user connected!");
   socket.on("connection", async (userId: string) => {
     // save the connection to the database
@@ -24,7 +27,6 @@ io.on("connection", (socket) => {
   // handling sending messages
   socket.on("sendMessage", async (data: ISocketMessage) => {
     const user = await onlineUserService.getOnlineUser(data.receiverId);
-    if (!user) throw new Error(`The receiver is not available.`);
     io.to(user.socketId).emit("getMessage", { senderId: data.senderId, content: data.content });
   });
 
@@ -33,3 +35,5 @@ io.on("connection", (socket) => {
     await onlineUserService.deleteOnlineUser(socket.id);
   });
 });
+
+export default io;

@@ -1,14 +1,17 @@
 import { AddOnlineUser, IOnlineUser, IOnlineUserService } from "./online-user.interface";
-import ApiError from "../../shared/utils/api-error";
 import { OnlineUserModel as OnlineUser } from "./online-user.model";
+import ApiError from "../../shared/utils/api-error";
 
 export class OnlineUserService implements IOnlineUserService {
   async addOnlineUser(data: AddOnlineUser): Promise<void> {
     try {
+      const exists = await this.getOnlineUser(data.userId);
+      if (!exists) {
       const user = await OnlineUser.create({
         userId: data.userId,
         socketId: data.socketId,
       });
+      }
     } catch (error) {
       throw new ApiError(error.message, 500);
     }
