@@ -13,7 +13,8 @@ export class OnlineUserService implements IOnlineUserService {
         });
       }
     } catch (error) {
-      throw new ApiError(error.message, 500);
+      console.log(error);
+      throw new ApiError("Error while retrieving data, please try again later!", 500);
     }
   }
 
@@ -31,7 +32,8 @@ export class OnlineUserService implements IOnlineUserService {
       const user = (await OnlineUser.findOne({ userId: userId }).select("userId socketId -_id")) as IOnlineUser;
       return user;
     } catch (error) {
-      throw new ApiError(error.message, 500);
+      console.log(error);
+      throw new ApiError("Error while retrieving data, please try again later!", 500);
     }
   }
 
@@ -39,7 +41,8 @@ export class OnlineUserService implements IOnlineUserService {
     try {
       await OnlineUser.deleteOne({ socketId: socketId });
     } catch (error) {
-      throw new ApiError(error.message, 500);
+      console.log(error);
+      throw new ApiError("Error while retrieving data, please try again later!", 500);
     }
   }
 }

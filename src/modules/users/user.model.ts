@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import * as bcrypt from "bcrypt";
 
 const User = new mongoose.Schema(
@@ -26,6 +26,24 @@ const User = new mongoose.Schema(
       type: String,
       default: undefined,
     },
+    friendRequests: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+      }
+    ],
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+      }
+    ],
+    onlineFriends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      }
+    ]
   },
   { timestamps: true }
 );

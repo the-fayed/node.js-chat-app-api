@@ -11,7 +11,8 @@ export class MessageService implements IMessageService {
       }
       return message;
     } catch (error) {
-      throw new ApiError(error.message, 500);
+      console.log(error);
+      throw new ApiError("Error while retrieving data, please try again later!", 500);
     }
   }
 
@@ -23,7 +24,8 @@ export class MessageService implements IMessageService {
       }
       return messages;
     } catch (error) {
-      throw new ApiError(error.message, 500);
+      console.log(error);
+      throw new ApiError("Error while retrieving data, please try again later!", 500);
     }
   }
 }

@@ -23,7 +23,8 @@ export class ConversationService implements IConversationService {
         return conversation;
       }
     } catch (error) {
-      throw new ApiError(error.message, 500);
+      console.log(error);
+      throw new ApiError("Error while retrieving data, please try again later!", 500);
     }
   }
 
@@ -35,7 +36,8 @@ export class ConversationService implements IConversationService {
       }
       return conversations;
     } catch (error) {
-      throw new ApiError(error.message, 500);
+      console.log(error);
+      throw new ApiError("Error while retrieving data, please try again later!", 500);
     }
   }
 }

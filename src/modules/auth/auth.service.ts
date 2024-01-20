@@ -27,7 +27,8 @@ export class AuthService implements IAuthService {
         accessToken: token,
       };
     } catch (error) {
-      throw new ApiError(error.message, 500);
+      console.log(error);
+      throw new ApiError("Error while retrieving data, please try again later!", 500);
     }
   }
 
@@ -49,7 +50,8 @@ export class AuthService implements IAuthService {
       const token = generateAccessToken({ userId: user.id });
       return { user: this.sanitizeData.sanitizeUser(user), accessToken: token };
     } catch (error) {
-      throw new ApiError(error.message, 500);
+      console.log(error);
+      throw new ApiError("Error while retrieving data, please try again later!", 500);
     }
   }
 }

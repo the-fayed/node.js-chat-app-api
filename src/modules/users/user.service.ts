@@ -22,11 +22,12 @@ export class UserService implements IUserService {
         : undefined;
       const user = (await User.create(data)) as IUser;
       if (!user) {
-        throw new ApiError("Error while creating new account, please try again later!", 500);
+        throw new ApiError("Error while creating new account, please try again later!", 400);
       }
       return this.sanitizeData.sanitizeUser(user);
     } catch (error) {
-      throw new ApiError(error.message, 500);
+      console.log(error);
+      throw new ApiError("Error while creating new account, please try again later!", 500);
     }
   }
 
@@ -34,7 +35,7 @@ export class UserService implements IUserService {
     try {
       const users = (await User.find()) as IUser[];
       if (!users) {
-        throw new ApiError("Error while retrieving data, please try again later!", 500);
+        throw new ApiError("Error while retrieving data, please try again later!", 400);
       }
       let sanitizedUsers: SanitizedUser[] = [];
       for (const user of users) {
@@ -42,7 +43,8 @@ export class UserService implements IUserService {
       }
       return sanitizedUsers;
     } catch (error) {
-      throw new ApiError(error.message, 500);
+      console.log(error);
+      throw new ApiError("Error while retrieving data, please try again later!", 500);
     }
   }
 
@@ -68,7 +70,8 @@ export class UserService implements IUserService {
       }
       return user;
     } catch (error) {
-      throw new ApiError(error.message, 500);
+      console.log(error);
+      throw new ApiError("Error while retrieving data, please try again later!", 500);
     }
   }
 
@@ -99,7 +102,8 @@ export class UserService implements IUserService {
       }
       return this.sanitizeData.sanitizeUser(user);
     } catch (error) {
-      throw new ApiError(error.message, 500);
+      console.log(error);
+      throw new ApiError("Error while retrieving data, please try again later!", 500);
     }
   }
 
@@ -110,7 +114,8 @@ export class UserService implements IUserService {
         throw new ApiError("User not found!", 404);
       }
     } catch (error) {
-      throw new ApiError(error.message, 500);
+      console.log(error);
+      throw new ApiError("Error while retrieving data, please try again later!", 500);
     }
   }
 }
