@@ -35,6 +35,14 @@ export class FriendService implements IFriendService {
           },
         },
       },
+      {
+        updateOne: {
+          filter: { _id: data.senderId },
+          update: {
+            $addToSet: { friends: data.receiverId },
+          },
+        },
+      },
     ];
     const result = await User.bulkWrite(operations as [], {});
     if (result.modifiedCount < 0) {

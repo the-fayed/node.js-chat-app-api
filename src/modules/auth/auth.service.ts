@@ -16,7 +16,6 @@ export class AuthService implements IAuthService {
   }
 
   async signup(data: SignupData): Promise<AuthResponse> {
-    try {
       const user = await this.userService.createUser(data);
       if (!user) {
         throw new ApiError("Error while creating your account, please try again later!", 500);
@@ -26,14 +25,9 @@ export class AuthService implements IAuthService {
         user: user,
         accessToken: token,
       };
-    } catch (error) {
-      console.log(error);
-      throw new ApiError("Error while retrieving data, please try again later!", 500);
-    }
   }
 
   async login(data: LoginData): Promise<AuthResponse> {
-    try {
       // check if user exists
       const user = data.email
         ? await this.userService.getUserByEmailOrUsername(data.email)
@@ -49,9 +43,5 @@ export class AuthService implements IAuthService {
       // preparing the response data
       const token = generateAccessToken({ userId: user.id });
       return { user: this.sanitizeData.sanitizeUser(user), accessToken: token };
-    } catch (error) {
-      console.log(error);
-      throw new ApiError("Error while retrieving data, please try again later!", 500);
-    }
   }
 }
