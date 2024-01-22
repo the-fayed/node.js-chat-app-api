@@ -9,6 +9,13 @@ export interface IPagination {
   prev?: number;
 }
 
+export interface IQueryString {
+  page?: number;
+  size?: number;
+  keyword?: string;
+  sort?: string;
+}
+
 export interface SearchObj {
   username: { $regex: string, $options: 'i' }
 }

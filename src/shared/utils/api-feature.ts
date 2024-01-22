@@ -1,12 +1,12 @@
 import { Document, Query } from "mongoose";
-import { IPagination, SearchObj } from "./utils.interface";
+import { IPagination, IQueryString, SearchObj } from "./utils.interface";
 
 export class ApiFeature<T extends Document> {
-  private reqQuery: any;
+  private reqQuery: IQueryString;
   private mongooseQuery: Query<T[], T>;
   private _paginationResult: IPagination | undefined;
 
-  constructor(mongooseQuery: Query<T[], T>, reqQuery: any) {
+  constructor(mongooseQuery: Query<T[], T>, reqQuery: IQueryString) {
     this.mongooseQuery = mongooseQuery;
     this.reqQuery = reqQuery;
   }
