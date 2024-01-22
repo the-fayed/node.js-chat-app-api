@@ -1,4 +1,3 @@
-import * as dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
 
@@ -9,7 +8,6 @@ import ApiError from '../shared/utils/api-error';
 import io from "./socket-io";
 
 
-dotenv.config();
 const app: express.Application = express();
 const socketPort: number = parseInt(process.env.SOCKET_PORT as string) || 8900;
 dbConnection();
