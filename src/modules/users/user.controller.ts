@@ -1,8 +1,9 @@
 import asyncHandler from "express-async-handler";
 
 import { SanitizedUser, UpdateUserData, UpdateUserPassword } from "./user.interface";
-import ApiError from "../../shared/utils/api-error";
+import { ApiFeatureResponse } from '../../shared/utils/utils.interface';
 import { AuthRequest } from '../auth/auth.interface';
+import ApiError from "../../shared/utils/api-error";
 import { UserService } from "./user.service";
 
 class UserController {
@@ -13,13 +14,14 @@ class UserController {
   }
 
   getAllUsers = asyncHandler(async (req, res, next): Promise<void> => {
-    const result: SanitizedUser[] = await this.userService.getAllUsers();
-    if (!result.length) {
+    const result: ApiFeatureResponse = await this.userService.getAllUsers(req.query);
+    if (!result.documents.length) {
       throw new ApiError("", 204);
     }
     res.status(200).json({
       status: "success",
-      data: result,
+      paginationResult: result.paginationResults,
+      data: result.documents,
     });
   });
 

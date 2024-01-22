@@ -1,5 +1,7 @@
 import { Document } from "mongoose";
 
+import { ApiFeatureResponse } from '../../shared/utils/utils.interface';
+
 export interface IUser extends Document {
   username: string;
   email: string;
@@ -29,7 +31,7 @@ export interface UpdateUserPassword {
 
 export interface IUserService {
   createUser: (data: CreateUser) => Promise<SanitizedUser>;
-  getAllUsers: () => Promise<SanitizedUser[]>;
+  getAllUsers: (reqQuery: any) => Promise<ApiFeatureResponse>;
   getUserById: (id: string) => Promise<SanitizedUser>;
   getUserByEmailOrUsername: (searchObj: string) => Promise<IUser>
   updateUserData: (data: UpdateUserData) => Promise<SanitizedUser>;
@@ -40,5 +42,5 @@ export interface IUserService {
 export interface SanitizedUser {
   id: string;
   username: string;
-  email: string;
+  avatar: string;
 }

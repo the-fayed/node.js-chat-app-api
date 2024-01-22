@@ -3,17 +3,17 @@ import { IPagination, IQueryString, SearchObj } from "./utils.interface";
 
 export class ApiFeature<T extends Document> {
   private reqQuery: IQueryString;
-  private mongooseQuery: Query<T[], T>;
+  private _mongooseQuery: Query<T[], T>;
   private _paginationResult: IPagination | undefined;
 
-  constructor(mongooseQuery: Query<T[], T>, reqQuery: IQueryString) {
-    this.mongooseQuery = mongooseQuery;
+  constructor(_mongooseQuery: Query<T[], T>, reqQuery: IQueryString) {
+    this._mongooseQuery = _mongooseQuery;
     this.reqQuery = reqQuery;
   }
 
   paginate(documentCount: number): this {
-    let page: number = this.reqQuery.page || 1;
-    let size: number = this.reqQuery.size || 15;
+    let page: number = parseInt(this.reqQuery.page as string) || 1;
+    let size: number = parseInt(this.reqQuery.size as string) || 15;
 
     let limit: number = size;
     let skip: number = (page - 1) * limit;
@@ -32,23 +32,19 @@ export class ApiFeature<T extends Document> {
       paginationResult.prev = paginationResult.current - 1;
     }
 
-    this.mongooseQuery = this.mongooseQuery.find().limit(limit).skip(skip);
+    this._mongooseQuery = this._mongooseQuery.limit(limit).skip(skip) as unknown as Query<T[], T>;
     this._paginationResult = paginationResult;
 
     return this;
-  }
-
-  get PaginationResult(): IPagination | undefined {
-    return this._paginationResult;
   }
 
   sort(): this {
     let sortObj: string;
     if (this.reqQuery.sort) {
       sortObj = this.reqQuery.sort.split(",").join(" ");
-      this.mongooseQuery = this.mongooseQuery.find().sort(sortObj);
+      this._mongooseQuery = this._mongooseQuery.sort(sortObj) as unknown as Query<T[], T>;
     } else {
-      this.mongooseQuery = this.mongooseQuery.find().sort("-createdAt");
+      this._mongooseQuery = this._mongooseQuery.sort("-createdAt") as unknown as Query<T[], T>;
     }
     return this;
   }
@@ -59,8 +55,16 @@ export class ApiFeature<T extends Document> {
       let searchObj: SearchObj = {
         username: { $regex: keyword, $options: "i" },
       };
-      this.mongooseQuery = this.mongooseQuery.find(searchObj);
+      this._mongooseQuery = this._mongooseQuery.find(searchObj) as unknown as Query<T[], T>;
     }
     return this;
+  }
+
+  get PaginationResult(): IPagination | undefined {
+    return this._paginationResult;
+  }
+
+  get MongooseQuery() {
+    return this._mongooseQuery;
   }
 }
