@@ -24,10 +24,11 @@ class ConversationController {
   });
 
   getConversations = asyncHandler(async (req: AuthRequest, res, next): Promise<void> => {
-    const result = await this.conversationService.getConversations(req.user.id);
+    const result = await this.conversationService.getConversations(req.user.id, req.query);
     res.status(200).json({
       status: 'success',
-      data: result,
+      paginationResults: result.paginationResults,
+      data: result.documents,
     });
   })
 }

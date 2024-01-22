@@ -1,4 +1,5 @@
 import { Document, ObjectId } from 'mongoose';
+import { ApiFeatureResponse, IQueryString } from '../../shared/utils/utils.interface';
 
 export interface IConversation extends Document {
   members: ObjectId[];
@@ -17,5 +18,5 @@ export interface GetConversationData {
 
 export interface IConversationService {
   createNewConversation: (date: CreateConversationData) => Promise<IConversation>;
-  getConversations: (userId: string) => Promise<IConversation[]>;
+  getConversations: (userId: string, reqQuery: IQueryString) => Promise<ApiFeatureResponse>;
 }
