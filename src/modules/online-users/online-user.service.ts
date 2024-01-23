@@ -1,7 +1,6 @@
 import { AddOnlineUser, IOnlineUser, IOnlineUserService } from "./online-user.interface";
 import { OnlineUserModel as OnlineUser } from "./online-user.model";
-import ApiError from "../../shared/utils/api-error";
-import { UserModel } from '../users/user.model';
+import { UserModel } from "../users/user.model";
 
 export class OnlineUserService implements IOnlineUserService {
   async addOnlineUser(data: AddOnlineUser): Promise<void> {
@@ -11,7 +10,9 @@ export class OnlineUserService implements IOnlineUserService {
         userId: data.userId,
         socketId: data.socketId,
       });
-      const addToOnlineFriendsList = await UserModel.find({ $in: { friends: user._id } });
+      const addToOnlineFriendsList = (await UserModel.find({ friends: { $in: data.userId } }))
+        ? await UserModel.updateMany({ friends: { $in: data.userId } }, { $addToSet: { onlineFriends: user.userId } })
+        : undefined;
     }
   }
 
@@ -28,6 +29,14 @@ export class OnlineUserService implements IOnlineUserService {
   async deleteOnlineUser(socketId: string): Promise<void> {
     const user = await OnlineUser.findOne({ socketId });
     await OnlineUser.deleteOne({ socketId });
-    await UserModel.updateMany({ $in: { friends: user._id } }, { friends: { $pull: user._id } });
+    const operations = [
+      {
+        updateMany: {
+          filter: { onlineFriends: { $in: user.userId } },
+          update: { $pull: { onlineFriends: user.userId } },
+        },
+      },
+    ];
+    await UserModel.bulkWrite(operations as [], {});
   }
 }

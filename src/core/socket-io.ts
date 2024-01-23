@@ -8,6 +8,11 @@ import app from "./app";
 
 const onlineUserService = new OnlineUserService();
 
+// getting all online users
+async function getAllOnlineUsers() {
+  return await onlineUserService.getAllOnlineUsers();
+}
+
 // init socket.io server
 const server = createServer(app);
 const io = new Server(server);
@@ -20,8 +25,7 @@ io.on("connection", async (socket) => {
   });
 
   // returning all online users to filter them and find every user's online friends
-  const onlineUsers = await onlineUserService.getAllOnlineUsers();
-  io.emit("getOnlineUsers", onlineUsers);
+  io.emit("getOnlineUsers", await getAllOnlineUsers());
 
   // handling sending messages
   socket.on("sendMessage", async ({...data}: ISocketMessage) => {
