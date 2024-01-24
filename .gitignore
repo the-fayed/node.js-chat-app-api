@@ -3,3 +3,4 @@ node_modules
 .env
 dist
 src/__tests__
+jest.config.ts

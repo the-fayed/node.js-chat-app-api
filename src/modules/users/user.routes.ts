@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import { isAuthorized } from '../../shared/middlewares/authorization';
+import friendRoutes from '../friends/friend.routes';
 import userController from "./user.controller";
 import {
   validateDeleteUser,
@@ -8,6 +9,7 @@ import {
   validateUpdateUserData,
   validateUpdateUserPassword,
 } from "./user.validator";
+
 
 const router: Router = Router();
 
@@ -18,5 +20,7 @@ router
   .route("/:id")
   .get( isAuthorized(),validateGetSpecificUser, userController.getUserById)
   .delete(isAuthorized(), validateDeleteUser, userController.deleteUser);
+
+router.use('/:userId/friends', friendRoutes);
 
 export default router;

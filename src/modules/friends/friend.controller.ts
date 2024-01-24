@@ -1,24 +1,36 @@
-import asyncHandler from 'express-async-handler';
+import asyncHandler from "express-async-handler";
 
-import { FriendRequestData } from './friend.interface';
-import { AuthRequest } from '../auth/auth.interface';
-import { FriendService } from './friend.service';
+import { FriendRequestData, IDeleteFriendData } from "./friend.interface";
+import { AuthRequest } from "../auth/auth.interface";
+import { FriendService } from "./friend.service";
 
 class FriendController {
   private friendService: FriendService;
 
   constructor() {
-    this.friendService = new FriendService
+    this.friendService = new FriendService();
   }
 
   sendFriendRequest = asyncHandler(async (req: AuthRequest, res, next): Promise<void> => {
     const friendRequestData: FriendRequestData = {
       senderId: req.user.id,
-      receiverId: req.body.receiverId
+      receiverId: req.params.receiverId,
     };
     const result = await this.friendService.sendFriendRequest(friendRequestData);
     res.status(201).json({
-      status: 'success',
+      status: "success",
+      data: result,
+    });
+  });
+
+  cancelFriendRequest = asyncHandler(async (req: AuthRequest, res, next): Promise<void> => {
+    const friendRequestData: FriendRequestData = {
+      senderId: req.user.id,
+      receiverId: req.params.receiverId,
+    };
+    const result = await this.friendService.cancelFriendRequest(friendRequestData);
+    res.status(200).json({
+      status: "success",
       data: result,
     });
   });
@@ -30,7 +42,7 @@ class FriendController {
     };
     const result = await this.friendService.acceptFriendRequest(friendRequestData);
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: result,
     });
   });
@@ -42,7 +54,7 @@ class FriendController {
     };
     const result = await this.friendService.rejectFriendRequest(friendRequestData);
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: result,
     });
   });
@@ -50,18 +62,30 @@ class FriendController {
   getAllFriendRequests = asyncHandler(async (req: AuthRequest, res, next): Promise<void> => {
     const result = await this.friendService.getAllFriendRequests(req.user.id);
     res.status(200).json({
-      status: 'success',
-      data: result
+      status: "success",
+      data: result,
     });
   });
 
   getAllFriends = asyncHandler(async (req: AuthRequest, res, next): Promise<void> => {
     const result = await this.friendService.getAllFriends(req.user.id);
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: result,
-    })
-  })
+    });
+  });
+
+  deleteFriend = asyncHandler(async (req: AuthRequest, res, next): Promise<void> => {
+    const deleteFriendData: IDeleteFriendData = {
+      userId: req.user.id,
+      friendId: req.params.userId,
+    };
+    const result = await this.friendService.deleteFriend(deleteFriendData);
+    res.status(200).json({
+      status: "success",
+      data: result,
+    });
+  });
 }
 
 const friendController = new FriendController();

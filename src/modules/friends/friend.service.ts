@@ -1,4 +1,4 @@
-import { FriendRequestData, IFriendRequest, IFriend, IFriendService } from "./friend.interface";
+import { FriendRequestData, IFriendRequest, IFriend, IFriendService, IDeleteFriendData } from "./friend.interface";
 import { UserModel as User } from "../users/user.model";
 import ApiError from "../../shared/utils/api-error";
 
@@ -22,6 +22,22 @@ export class FriendService implements IFriendService {
       console.log(error);
       throw new ApiError("Error while sending friend request, please try again later!", 500);
     }
+  }
+
+  async cancelFriendRequest(data: FriendRequestData):Promise<string> {
+    const operations = [
+      {
+        updateOne: {
+          filter: { _id: data.receiverId },
+          update: { $pull: { friendRequests: data.senderId } }
+        },
+      },
+    ];
+    const result = await User.bulkWrite(operations as [], {});
+    if (result.modifiedCount < 0) {
+      throw new ApiError('Error while canceling friend request!', 400);
+    }
+    return 'Friend request has been canceled successfully!';
   }
 
   async acceptFriendRequest(data: FriendRequestData): Promise<string> {
@@ -87,5 +103,21 @@ export class FriendService implements IFriendService {
       throw new ApiError("User not found!", 404);
     }
     return friendRequests;
+  }
+
+  async deleteFriend(data: IDeleteFriendData): Promise<string> {
+    const operations = [
+      {
+        updateOne: {
+          filter: { _id: data.userId },
+          update: { $pull: { friends: data.friendId } }
+        }
+      }
+    ];
+    const result = await User.bulkWrite(operations as [], {});
+    if (result.modifiedCount < 0) {
+      throw new ApiError('Error while deleting friend!', 400);
+    }
+    return 'Friend deleted successfully!';
   }
 }

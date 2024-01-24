@@ -1,17 +1,28 @@
 import { Router } from "express";
 
 import { isAuthorized } from "../../shared/middlewares/authorization";
-import { validateAcceptAndRejectFriendRequestData, validateSendFriendRequestData } from "./friend.validator";
+import {
+  validateAcceptAndRejectFriendRequestData,
+  validateDeleteFriendData,
+  validateSendOrCancelFriendRequestData,
+} from "./friend.validator";
 import friendController from "./friend.controller";
 
-const router: Router = Router();
+const router: Router = Router({ mergeParams: true });
 
 router.post(
   "/send-friend-request",
   isAuthorized(),
-  validateSendFriendRequestData,
+  validateSendOrCancelFriendRequestData,
   friendController.sendFriendRequest
-  );
+);
+
+router.post(
+  "/cancel-friend-request",
+  isAuthorized(),
+  validateSendOrCancelFriendRequestData,
+  friendController.cancelFriendRequest
+);
 
 router.post(
   "/accept-friend-request",
@@ -29,5 +40,12 @@ router.post(
 
 router.get("/friend-requests", isAuthorized(), friendController.getAllFriendRequests);
 router.get("/", isAuthorized(), friendController.getAllFriends);
+
+router.delete(
+  "/delete-friend",
+  isAuthorized(),
+  validateDeleteFriendData,
+  friendController.deleteFriend
+);
 
 export default router;
