@@ -7,11 +7,17 @@ Self-training RESTful back-end project for understanding Socket.io concepts.
 ## Key Features
 
   1- Authentication system
+
   2- Authorization system
+
   3- User management
+
   4- Friends management
+
   5- Conversations management
+
   6- Real-time messaging
+  
   7- Messages management
 
 ## Installation
