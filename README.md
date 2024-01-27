@@ -17,7 +17,7 @@ Self-training RESTful back-end project for understanding Socket.io concepts.
   5- Conversations management
 
   6- Real-time messaging
-  
+
   7- Messages management
 
 ## Installation
@@ -34,22 +34,22 @@ Finally, create .env file in project's root directory and specify the environmen
 
 ```env
 # APP_SETTING
-BASEURL
-NODE_ENV
-APP_PORT
-SOCKET_PORT
+BASEURL = "http://localhost:3000"
+NODE_ENV = "Development"
+APP_PORT = "3000"
+SOCKET_PORT = "8900"
 
 # MONGO
-MONGO_URI
+MONGO_URI =
 
 # JWT
-JWT_SECRET
-JWT_EXPIRE
+JWT_SECRET =
+JWT_EXPIRE =
 
 # CLOUDINARY
-CLOUDINARY_CLOUD_NAME
-CLOUDINARY_API_KEY
-CLOUDINARY_API_SECRET
+CLOUDINARY_CLOUD_NAME =
+CLOUDINARY_API_KEY =
+CLOUDINARY_API_SECRET =
 ```
 
 ## Running the app
@@ -59,7 +59,6 @@ CLOUDINARY_API_SECRET
 
   2- To run the app in production environment run:
   ``` npm run start:prod ```
-
 
 ## End Points
 

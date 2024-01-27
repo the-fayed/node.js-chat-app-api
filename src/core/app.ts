@@ -1,7 +1,12 @@
+const sanitizer = require('express-sanitizer');
+import compression from 'compression';
 import express from 'express';
 import morgan from 'morgan';
+import cors from 'cors';
+import hpp from 'hpp';
 
 import globalErrorHandler from '../shared/middlewares/global-error-handling';
+import rateLimiter from '../shared/middlewares/rate-limiter';
 import { routesMounter } from '../modules/routes-mounter';
 import { dbConnection } from '../config/db-connection';
 import ApiError from '../shared/utils/api-error';
@@ -12,7 +17,28 @@ const app: express.Application = express();
 const socketPort: number = parseInt(process.env.SOCKET_PORT as string) || 8900;
 dbConnection();
 
+/**
+ * adding security middlewares
+ * cors => enabling cors
+ * compression => enabling compression
+ * hpp => to avoid hpp attacks
+ * sanitizer => to avoid SQL or noSQL attacks
+ * rate limiter => to avoid app crashing
+ */
+app.use(rateLimiter);
 
+app.use(cors());
+app.options('*', cors());
+
+app.use(compression());
+
+app.use(hpp());
+
+app.use(sanitizer({
+  level: 5,
+  xss: true,
+  nosql: true,
+}));
 
 /**
  * Public middlewares
