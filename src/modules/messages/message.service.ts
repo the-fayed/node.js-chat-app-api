@@ -2,8 +2,8 @@ import { Query } from 'mongoose';
 
 import { ApiFeatureResponse, IQueryString } from '../../shared/utils/utils.interface';
 import { CreateMessageData, IMessage, IMessageService } from "./message.interface";
+import { ApiFeature } from '../../shared/utils/api-feature';
 import { MessageModel as Message } from "./message.model";
-import { ApiFeature } from 'src/shared/utils/api-feature';
 import ApiError from "../../shared/utils/api-error";
 
 export class MessageService implements IMessageService {
