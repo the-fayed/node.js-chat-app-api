@@ -14,6 +14,7 @@ import {
 const router: Router = Router();
 
 router.route("/").get(isAuthorized(), userController.getAllUsers);
+router.get('/logged-user', isAuthorized(), userController.getLoggedUser);
 router.patch("/update-data", isAuthorized(), validateUpdateUserData, userController.updateUserData);
 router.patch("/update-password",isAuthorized(), validateUpdateUserPassword, userController.updateUserPassword);
 router

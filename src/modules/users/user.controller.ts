@@ -30,6 +30,11 @@ class UserController {
     res.status(200).json({ status: "success", data: result });
   });
 
+  getLoggedUser = asyncHandler(async (req: AuthRequest, res, next): Promise<void> => {
+    const result = await this.userService.getUserById(req.user.id);
+    res.status(200).json({ status: 'success', data: result });
+  })
+
   updateUserData = asyncHandler(async (req: AuthRequest, res, next): Promise<void> => {
     const data: UpdateUserData = {
       id: req.user.id as string,
