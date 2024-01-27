@@ -1,5 +1,7 @@
 import { Document } from 'mongoose';
 
+import { ApiFeatureResponse, IQueryString } from '../../shared/utils/utils.interface';
+
 export interface IMessage extends Document {
   senderId: string;
   conversationId: string;
@@ -14,5 +16,5 @@ export interface CreateMessageData {
 
 export interface IMessageService {
   createMessage: (data: CreateMessageData) => Promise<IMessage>;
-  getAllMessages: (conversationId: string) => Promise<IMessage[]>;
+  getAllMessages: (conversationId: string, reqQuery: IQueryString) => Promise<ApiFeatureResponse>;
 }

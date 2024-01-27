@@ -1,5 +1,9 @@
+import { Query } from 'mongoose';
+
+import { ApiFeatureResponse, IQueryString } from '../../shared/utils/utils.interface';
 import { CreateMessageData, IMessage, IMessageService } from "./message.interface";
 import { MessageModel as Message } from "./message.model";
+import { ApiFeature } from 'src/shared/utils/api-feature';
 import ApiError from "../../shared/utils/api-error";
 
 export class MessageService implements IMessageService {
@@ -11,11 +15,14 @@ export class MessageService implements IMessageService {
       return message;
   }
 
-  async getAllMessages(conversationId: string): Promise<IMessage[]> {
-      const messages = (await Message.find({ conversationId: conversationId })) as unknown as IMessage[];
-      if (!messages || !messages.length) {
-        throw new ApiError("No messages found!", 403);
-      }
-      return messages;
+  async getAllMessages(conversationId: string, reqQuery: IQueryString): Promise<ApiFeatureResponse> {
+    const documentCount: number = await Message.countDocuments({ conversationId });
+    const apiFeature = new ApiFeature(Message.find({ conversationId }) as unknown as Query<IMessage[], IMessage>, reqQuery).paginate(documentCount).sort().search();
+    const { MongooseQuery, PaginationResult } = apiFeature;
+    const messages = await MongooseQuery;
+    if (!messages || !messages.length) {
+      throw new ApiError('No messages found!', 404);
+    }
+    return { documents: messages, paginationResults: PaginationResult };
   }
 }

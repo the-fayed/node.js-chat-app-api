@@ -26,10 +26,11 @@ class MessageController {
 
   getAllMessages = asyncHandler(async (req, res, next): Promise<void> => {
     const conversationId = req.params.conversationId;
-    const result = await this.messageService.getAllMessages(conversationId);
+    const result = await this.messageService.getAllMessages(conversationId, req.query);
     res.status(200).json({
       status: "success",
-      data: result,
+      paginationResult: result.paginationResults,
+      data: result.documents,
     });
   });
 }
