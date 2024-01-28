@@ -3,8 +3,7 @@ import { Request } from "express";
 import { IUser, SanitizedUser } from "../users/user.interface";
 
 export interface LoginData {
-  username?: string;
-  email?: string;
+  emailOrUsername: string;
   password: string;
 }
 

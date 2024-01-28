@@ -5,6 +5,7 @@ import { generateAccessToken } from "../../shared/utils/code-factor";
 import { SanitizeData } from "../../shared/utils/sanitize-data";
 import ApiError from "../../shared/utils/api-error";
 import { UserService } from "../users/user.service";
+import { IUser, SanitizedUser } from '../users/user.interface';
 
 export class AuthService implements IAuthService {
   private sanitizeData: SanitizeData;
@@ -16,22 +17,20 @@ export class AuthService implements IAuthService {
   }
 
   async signup(data: SignupData): Promise<AuthResponse> {
-      const user = await this.userService.createUser(data);
+      const user = await this.userService.createUser(data) as IUser;
       if (!user) {
         throw new ApiError("Error while creating your account, please try again later!", 500);
       }
       const token = generateAccessToken({ userId: user.id });
       return {
-        user: user,
+        user: this.sanitizeData.sanitizeUser(user),
         accessToken: token,
       };
   }
 
   async login(data: LoginData): Promise<AuthResponse> {
       // check if user exists
-      const user = data.email
-        ? await this.userService.getUserByEmailOrUsername(data.email)
-        : await this.userService.getUserByEmailOrUsername(data.username);
+      const user = await this.userService.getUserByEmailOrUsername(data.emailOrUsername);
       if (!user) {
         throw new ApiError("Invalid credentials!", 401);
       }

@@ -10,5 +10,6 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
   }
 }

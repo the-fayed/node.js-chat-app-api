@@ -1,4 +1,5 @@
 const sanitizer = require('express-sanitizer');
+import { serve, setup } from 'swagger-ui-express';
 import compression from 'compression';
 import express from 'express';
 import morgan from 'morgan';
@@ -10,6 +11,7 @@ import rateLimiter from '../shared/middlewares/rate-limiter';
 import { routesMounter } from '../modules/routes-mounter';
 import { dbConnection } from '../config/db-connection';
 import ApiError from '../shared/utils/api-error';
+import swaggerDocs from '../../swagger.json';
 import io from "./socket-io";
 
 
@@ -64,6 +66,16 @@ if (process.env.NODE_ENV === 'Development') {
  * dist: src/modules/routes-mounter.ts
  */
 routesMounter(app);
+
+/**
+ * configure swagger options
+ * using swagger to document apis
+ */
+const opts = {
+  customCss: ".swagger-ui .topbar { display : none}",
+};
+
+app.use('/api-docs', serve, setup(swaggerDocs, opts))
 
 // init socket server
 io.listen(socketPort);

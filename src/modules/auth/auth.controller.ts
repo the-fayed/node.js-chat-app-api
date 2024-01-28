@@ -26,8 +26,7 @@ class AuthController {
 
   login = asyncHandler(async (req, res, next): Promise<void> => {
     const loginData: LoginData = {
-      email: req.body.email,
-      username: req.body.username,
+      emailOrUsername: req.body.emailOrUsername,
       password: req.body.password,
     };
     const result = await this.authService.login(loginData);

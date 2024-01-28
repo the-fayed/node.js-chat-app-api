@@ -1,0 +1,206 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Rest Real-time chat API",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Ahmed Fayed",
+      "email": "ll.ahmedfayed@gamil.com",
+      "url": "https://www.linkedin.com/in/ahmed-fayeed/"
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about project",
+    "url": "https://www.github.com/the-fayed/node.js-chat-app-api"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "localhost server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authentication endpoints."
+    },
+    {
+      "name": "Users",
+      "description": "Users Endpoints."
+    },
+    {
+      "name": "Friends",
+      "description": "Friendship related operations."
+    },
+    {
+      "name": "Conversations",
+      "description": "Conversation related operations."
+    },
+    {
+      "name": "Messages",
+      "description": "Messages related operations."
+    }
+  ],
+  "paths": {
+    "/api/v1/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summery": "Sign up as new user",
+        "description": "Sign up",
+        "operationId": "signup",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/user"
+              }
+            },
+            "required": true
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Signed up successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "data": {
+                    "id": "657e720637fc1d3b85ba07fe",
+                    "username": "Example Username",
+                    "avatar": "http://example.com"
+                  },
+                  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWE4MTY1Nzk3NWZjZDY1MDk3YmVhYTUiLCJpYXQiOjE3MDY0NTk3NzIsImV4cCI6MTcwNjQ4ODU3Mn0.0HGm2MfjMg1DNe3gE2AtiRj579yOrnc353fxuqOb600"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "error",
+                  "errors": [
+                    {
+                      "type": "field",
+                      "value": "ahmed@email.coms",
+                      "msg": "Email already in use!",
+                      "path": "email",
+                      "location": "body"
+                    },
+                    {
+                      "type": "field",
+                      "value": "user name",
+                      "msg": "Unavailable username!",
+                      "path": "username",
+                      "location": "body"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "fail",
+                  "message": "Error while creating your account, please try again later!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "summary": "User login API",
+        "tags": ["Auth"],
+        "description": "User login",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "emailOrUsername": "example@example.com",
+                "password": "password"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Logged in successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "data": {
+                    "id": "657e720637fc1d3b85ba07fe",
+                    "username": "Example Username",
+                    "avatar": "http://example.com"
+                  },
+                  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWE4MTY1Nzk3NWZjZDY1MDk3YmVhYTUiLCJpYXQiOjE3MDY0NTk3NzIsImV4cCI6MTcwNjQ4ODU3Mn0.0HGm2MfjMg1DNe3gE2AtiRj579yOrnc353fxuqOb600"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "error",
+                  "message": "Invalid credentials"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "user": {
+        "required": ["username", "email", "password", "passwordConfirmation"],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "visible user name",
+            "example": "Ahmed Fayed"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "example": "user@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password",
+            "example": "Aa@12345678"
+          },
+          "passwordConfirmation": {
+            "type": "string",
+            "description": "Password Confirmation",
+            "example": "Aa@12345678"
+          },
+          "avatar": {
+            "type": "file",
+            "contentMediaType": "image/png, image/jpg, image/jpeg",
+            "contentEncoding": "base64",
+            "description": "User visible avatar"
+          }
+        }
+      }
+    }
+  }
+}
