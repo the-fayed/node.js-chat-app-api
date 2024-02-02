@@ -63,7 +63,8 @@ CLOUDINARY_API_SECRET =
 ## End Points
 
 After running the app on any environment(e.g. development)
-visit: <https://localhost:{portYouRunningTheAppOn}/api/docs>
+
+visit: `/api/docs`.
 
 ## License
 
