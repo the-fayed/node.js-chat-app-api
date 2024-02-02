@@ -4,8 +4,7 @@
   "main": "server.js",
   "scripts": {
     "start:dev": "nodemon",
-    "start:prod": "NODE_ENV=Production node --env-file .env dist/core/server.js",
-    "test": "NODE_ENV=Test node --env-file .env -r jest"
+    "start:prod": "NODE_ENV=Production node --env-file .env dist/core/server.js"
   },
   "keywords": [],
   "author": "Ahmed Fayed",

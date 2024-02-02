@@ -10,42 +10,19 @@ import friendController from "./friend.controller";
 
 const router: Router = Router({ mergeParams: true });
 
-router.post(
-  "/send-friend-request",
-  isAuthorized(),
-  validateSendOrCancelFriendRequestData,
-  friendController.sendFriendRequest
-);
+router
+  .route("/friend-request")
+  .post(isAuthorized(), validateSendOrCancelFriendRequestData, friendController.sendFriendRequest)
+  .delete(isAuthorized(), validateSendOrCancelFriendRequestData, friendController.cancelFriendRequest);
 
-router.post(
-  "/cancel-friend-request",
-  isAuthorized(),
-  validateSendOrCancelFriendRequestData,
-  friendController.cancelFriendRequest
-);
-
-router.post(
-  "/accept-friend-request",
-  isAuthorized(),
-  validateAcceptAndRejectFriendRequestData,
-  friendController.acceptFriendRequest
-);
-
-router.post(
-  "/reject-friend-request",
-  isAuthorized(),
-  validateAcceptAndRejectFriendRequestData,
-  friendController.rejectFriendRequest
-);
+router
+  .route("/:senderId")
+  .post(isAuthorized(), validateAcceptAndRejectFriendRequestData, friendController.acceptFriendRequest)
+  .delete(isAuthorized(), validateAcceptAndRejectFriendRequestData, friendController.rejectFriendRequest);
 
 router.get("/friend-requests", isAuthorized(), friendController.getAllFriendRequests);
 router.get("/", isAuthorized(), friendController.getAllFriends);
 
-router.delete(
-  "/delete-friend",
-  isAuthorized(),
-  validateDeleteFriendData,
-  friendController.deleteFriend
-);
+router.delete("/delete/:friendId", isAuthorized(), validateDeleteFriendData, friendController.deleteFriend);
 
 export default router;

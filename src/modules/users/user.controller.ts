@@ -63,9 +63,9 @@ class UserController {
     });
   });
 
-  deleteUser = asyncHandler(async (req, res, next): Promise<void> => {
-    const result: void = await this.userService.deleteUser(req.params.id);
-    res.sendStatus(203);
+  deleteUser = asyncHandler(async (req: AuthRequest, res, next): Promise<void> => {
+    const result: void = await this.userService.deleteUser(req.user.id);
+    res.status(200).json({ status: "success", message: "Account deleted successfully!"});
   });
 }
 

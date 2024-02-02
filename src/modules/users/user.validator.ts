@@ -1,4 +1,5 @@
 import { check } from "express-validator";
+import * as bcrypt from "bcrypt";
 
 import { validateSchema } from "../../shared/middlewares/validator";
 import { UserModel as User } from "./user.model";
@@ -86,33 +87,24 @@ export const validateUpdateUserData = [
 ];
 
 export const validateUpdateUserPassword = [
-  check("password")
+  check('currentPassword').notEmpty().withMessage('Old password is required!').isString().custom(async (value: string, { req }) => {
+    const user = await User.findOne({ _id: req.user.id });
+    if (! await bcrypt.compare(value, user.password)) {
+      throw new Error("Current password is incorrect!");
+    }
+  }),
+  check("newPassword")
     .notEmpty()
     .withMessage("Password is required!")
     .isStrongPassword()
     .withMessage(
       "Password must contain uppercase, lowercase, and special character and must be at least 8 characters length long!"
     ),
-  check("passwordConfirmation").custom((value: string, { req }) => {
-    if (value !== req.body.password) {
+  check("newPasswordConfirmation").custom((value: string, { req }) => {
+    if (value !== req.body.newPassword) {
       throw new Error("Password and Password confirmation does not match!");
     }
     return true;
   }),
-  validateSchema,
-];
-
-export const validateDeleteUser = [
-  check("id")
-    .notEmpty()
-    .withMessage("User id is required!")
-    .isMongoId()
-    .withMessage("Invalid user id!")
-    .custom(async (value: string) => {
-      const user = await User.findById(value);
-      if (!user) {
-        throw new Error(`No user found with id ${value}!`);
-      }
-    }),
   validateSchema,
 ];

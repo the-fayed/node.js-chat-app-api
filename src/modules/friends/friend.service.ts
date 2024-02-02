@@ -89,8 +89,8 @@ export class FriendService implements IFriendService {
     const friends = (await User.findOne({ _id: userId })
       .select("friends")
       .populate("friends", "username avatar")) as IFriend[];
-    if (!friends) {
-      throw new ApiError("User not found!", 404);
+    if (!friends || !friends.length) {
+      throw new ApiError("User not found!", 204);
     }
     return friends;
   }
@@ -99,8 +99,8 @@ export class FriendService implements IFriendService {
     const friendRequests = (await User.findOne({ _id: userId })
       .select("friendRequests -_id")
       .populate("friendRequests", "username avatar")) as IFriendRequest[];
-    if (!friendRequests) {
-      throw new ApiError("User not found!", 404);
+    if (!friendRequests || !friendRequests.length) {
+      throw new ApiError("User not found!", 204);
     }
     return friendRequests;
   }

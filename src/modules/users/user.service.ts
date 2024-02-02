@@ -58,9 +58,6 @@ export class UserService implements IUserService {
     const user = (await User.findOne({
       $or: [{ email: searchObj }, { username: searchObj }],
     })) as IUser;
-    if (!user) {
-      throw new ApiError("User not found!", 404);
-    }
     return user;
   }
 
