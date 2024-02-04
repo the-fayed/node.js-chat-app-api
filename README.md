@@ -64,7 +64,7 @@ CLOUDINARY_API_SECRET =
 
 After running the app on any environment(e.g. development)
 
-visit: `/api/docs`.
+visit: `/api/docs` endpoint from full documentation with swagger.
 
 ## License
 

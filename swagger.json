@@ -45,7 +45,7 @@
     "/api/v1/auth/signup": {
       "post": {
         "tags": ["Auth"],
-        "summery": "Sign up as new user",
+        "summary": "Sign up as new user",
         "description": "Sign up",
         "operationId": "signup",
         "requestBody": {
@@ -135,7 +135,7 @@
     "/api/v1/users/logged-user": {
       "get": {
         "tags": ["Users"],
-        "summery": "Get logged user data API",
+        "summary": "Get logged user data API",
         "description": "Get logged user data",
         "operationId": "getLoggedUser",
         "security": [{ "BearerAuth": [] }],
@@ -170,7 +170,7 @@
     "/api/v1/users": {
       "get": {
         "description": "Get All users - pagination, search, and sort is supported",
-        "summery": "get all users",
+        "summary": "get all users",
         "operationId": "getAllUsers",
         "tags": ["Users"],
         "security": [{ "BearerAuth": [] }],
@@ -266,7 +266,7 @@
     "/api/v1/users/{userId}": {
       "get": {
         "description": "Get specific user by id",
-        "summery": "Get user by id",
+        "summary": "Get user by id",
         "operationId": "getUserById",
         "tags": ["Users"],
         "parameters": [
@@ -312,7 +312,7 @@
       }
     },
     "/api/v1/users/update-data": {
-      "post": {
+      "patch": {
         "description": "Update logged user data",
         "operationId": "updateUserData",
         "tags": ["Users"],
@@ -365,7 +365,7 @@
       }
     },
     "/api/v1/users/update-password": {
-      "post": {
+      "patch": {
         "description": "Update logged user password",
         "summary": "Endpoint to update the logged user's password.",
         "operationId": "updateUserPassword",
@@ -600,7 +600,7 @@
     "/api/v1/friends": {
       "get": {
         "description": "Get All friends",
-        "summery": "Endpoint to get all friends",
+        "summary": "Endpoint to get all friends",
         "operationId": "getAllFriends",
         "tags": ["Friends"],
         "security": [{ "BearerAuth": [] }],
@@ -647,7 +647,7 @@
     "/api/v1/friends/friend-requests": {
       "get": {
         "description": "Get all friend requests",
-        "summery": "Endpoint to get all friend requests",
+        "summary": "Endpoint to get all friend requests",
         "operationId": "getAllFriendRequests",
         "tags": ["Friends"],
         "security": [{ "BearerAuh": [] }],
@@ -723,6 +723,40 @@
           },
           "500": {
             "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/v1/conversations": {
+      "post": {
+        "description": "Create new conversation",
+        "summary": "Endpoint to create a conversation",
+        "tags": ["Conversations"],
+        "security": [
+          { "BearerAuth": [] }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "receiverId": "657e720637fc1d3b85ba07fe"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "data": {
+
+                  }
+                }
+              }
+            }
           }
         }
       }
