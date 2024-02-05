@@ -903,6 +903,135 @@
           }
         }
       }
+    },
+    "/api/v1/conversations/{conversationId}/messages": {
+      "post": {
+        "description": "Send new message on specific conversation",
+        "summary": "Send new message on specific conversation",
+        "tags": ["Messages"],
+        "operationId": "createNewMessage",
+        "security": [
+          { "BearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "conversationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "content": "Hello, there!"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "data": {
+                    "senderId": "65a812f2a136d5123193ecc8",
+                    "conversationId": "65c0adce80ff0252108ab9a3",
+                    "content": "Hello there!",
+                    "_id": "65c1077d1f4ec34f83c9e2a8",
+                    "createdAt": "2024-02-05T16:06:21.776Z",
+                    "updatedAt": "2024-02-05T16:06:21.776Z",
+                    "__v": 0
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "get": {
+        "description": "Get all messages in specific conversation",
+        "summary": "Get all messages in specific conversation",
+        "tags": ["Messages"],
+        "operationId": "getMessageListByConversationID",
+        "security": [
+          { "BearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "conversationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "paginationResult": {
+                    "numberOfPages": 10,
+                    "current": 3,
+                    "next": 4,
+                    "prev": 2
+                  },
+                  "data": [
+                    {
+                      "senderId": "65a812f2a136d5123193ecc8",
+                      "conversationId": "65c0adce80ff0252108ab9a3",
+                      "content": "Hello there!",
+                      "_id": "65c1077d1f4ec34f83c9e2a8",
+                      "createdAt": "2024-02-05T16:06:21.776Z",
+                      "updatedAt": "2024-02-05T16:06:21.776Z",
+                      "__v": 0
+                    },
+                    {
+                      "senderId": "65a812f2a136d5123193ecc8",
+                      "conversationId": "65c0adce80ff0252108ab9a3",
+                      "content": "Hello there!",
+                      "_id": "65c1077d1f4ec34f83c9e2a8",
+                      "createdAt": "2024-02-05T16:06:21.776Z",
+                      "updatedAt": "2024-02-05T16:06:21.776Z",
+                      "__v": 0
+                    },
+                    {
+                      "senderId": "65a812f2a136d5123193ecc8",
+                      "conversationId": "65c0adce80ff0252108ab9a3",
+                      "content": "Hello there!",
+                      "_id": "65c1077d1f4ec34f83c9e2a8",
+                      "createdAt": "2024-02-05T16:06:21.776Z",
+                      "updatedAt": "2024-02-05T16:06:21.776Z",
+                      "__v": 0
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "204": {
+            "$ref": "#/components/responses/204"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
     }
   },
   "components": {

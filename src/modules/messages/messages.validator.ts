@@ -10,12 +10,5 @@ export const validateSendMessage = [
       throw new Error('Conversation not found!');
     }
   }),
-  check('receiverId').notEmpty().withMessage('Message receiver id is required!').isMongoId().withMessage('Invalid user id!').custom(async (value: string, { req }) => {
-    const user = await User.findOne({ _id: value });
-    if(!user || req.user.id === value) {
-      throw new Error('User not found!');
-    }
-    return true;
-  }),
   validateSchema,
 ]

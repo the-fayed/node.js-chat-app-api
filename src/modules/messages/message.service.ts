@@ -21,7 +21,7 @@ export class MessageService implements IMessageService {
     const { MongooseQuery, PaginationResult } = apiFeature;
     const messages = await MongooseQuery;
     if (!messages || !messages.length) {
-      throw new ApiError('No messages found!', 404);
+      throw new ApiError('No messages found!', 204);
     }
     return { documents: messages, paginationResults: PaginationResult };
   }
