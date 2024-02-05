@@ -61,7 +61,8 @@ export class FriendService implements IFriendService {
       },
     ];
     const result = await User.bulkWrite(operations as [], {});
-    if (result.modifiedCount < 0) {
+    console.log(result.modifiedCount);
+    if (result.modifiedCount < 2) {
       throw new ApiError("Error while accepting friend request!", 400);
     }
     return "Friend request accepted successfully!";

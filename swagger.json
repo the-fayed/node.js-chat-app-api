@@ -813,10 +813,93 @@
               "application/json": {
                 "example": {
                   "status": "success",
-                  "data": {}
+                  "data": {
+                    "members": ["65a812f2a136d5123193ecc8", "65ab87d1e84386a80d03f959"],
+                    "_id": "65c0adce80ff0252108ab9a3",
+                    "createdAt": "2024-02-05T09:43:42.889Z",
+                    "updatedAt": "2024-02-05T09:43:42.889Z",
+                    "__v": 0
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "error",
+                  "message": "You can only start conversations with your friends!"
+                }
+              }
+            }
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "get": {
+        "description": "Get All conversations",
+        "operationId": "getConversations",
+        "summary": "get all conversations for the logged user",
+        "tags": ["Conversations"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "paginationResult": {
+                    "numberOfPages": 10,
+                    "current": 2,
+                    "next": 3,
+                    "prev": 1
+                  },
+                  "data": [
+                    {
+                      "members": ["65a812f2a136d5123193ecc8", "65ab87d1e84386a80d03f959"],
+                      "_id": "65c0adce80ff0252108ab9a3",
+                      "createdAt": "2024-02-05T09:43:42.889Z",
+                      "updatedAt": "2024-02-05T09:43:42.889Z",
+                      "__v": 0
+                    },
+                    {
+                      "members": ["65a812f2a136d5123193ecc8", "65ab87d1e84386a80d03f959"],
+                      "_id": "65c0adce80ff0252108ab9a3",
+                      "createdAt": "2024-02-05T09:43:42.889Z",
+                      "updatedAt": "2024-02-05T09:43:42.889Z",
+                      "__v": 0
+                    },
+                    {
+                      "members": ["65a812f2a136d5123193ecc8", "65ab87d1e84386a80d03f959"],
+                      "_id": "65c0adce80ff0252108ab9a3",
+                      "createdAt": "2024-02-05T09:43:42.889Z",
+                      "updatedAt": "2024-02-05T09:43:42.889Z",
+                      "__v": 0
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "204": {
+            "$ref": "#/components/responses/204"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
           }
         }
       }

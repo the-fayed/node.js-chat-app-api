@@ -19,8 +19,8 @@ export class ConversationService implements IConversationService {
       // creating conversation if not existing
     } else {
       // checking if sender and receiver are friends
-      const receiver = await User.findOne({ _id: data.receiverId });
-      if (data.senderId in receiver.friends) {
+      const isFriend = await User.findOne({ $and: [{ _id: data.senderId}, { friends: { $in: data.receiverId } }]})
+      if (isFriend) {
         conversation = (await Conversation.create({
           members: [data.senderId, data.receiverId],
         })) as unknown as IConversation;

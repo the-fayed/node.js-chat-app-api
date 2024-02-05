@@ -18,6 +18,6 @@ router.patch("/update-password", isAuthorized(), validateUpdateUserPassword, use
 router.get("/:id", isAuthorized(), validateGetSpecificUser, userController.getUserById);
 router.delete("/delete-account", isAuthorized(), userController.deleteUser);
 
-router.use("/:userId/friends", friendRoutes);
+router.use("/:receiverId/friends", friendRoutes);
 
 export default router;

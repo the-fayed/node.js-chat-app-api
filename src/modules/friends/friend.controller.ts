@@ -38,7 +38,7 @@ class FriendController {
   acceptFriendRequest = asyncHandler(async (req: AuthRequest, res, next): Promise<void> => {
     const friendRequestData: FriendRequestData = {
       receiverId: req.user.id,
-      senderId: req.body.senderId,
+      senderId: req.params.senderId,
     };
     const result = await this.friendService.acceptFriendRequest(friendRequestData);
     res.status(200).json({
@@ -50,7 +50,7 @@ class FriendController {
   rejectFriendRequest = asyncHandler(async (req: AuthRequest, res, next): Promise<void> => {
     const friendRequestData: FriendRequestData = {
       receiverId: req.user.id,
-      senderId: req.body.senderId,
+      senderId: req.params.senderId,
     };
     const result = await this.friendService.rejectFriendRequest(friendRequestData);
     res.status(200).json({
