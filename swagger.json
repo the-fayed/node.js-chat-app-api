@@ -80,6 +80,17 @@
               }
             }
           },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "error",
+                  "message": "Error while creating your account, please try again later!"
+                }
+              }
+            }
+          },
           "409": {
             "$ref": "#/components/responses/409"
           },
@@ -467,6 +478,17 @@
           "401": {
             "$ref": "#/components/responses/401"
           },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "error",
+                  "message": "Error while sending friend request!"
+                }
+              }
+            }
+          },
           "404": {
             "$ref": "#/components/responses/404"
           },
@@ -508,6 +530,17 @@
           },
           "401": {
             "$ref": "#/components/responses/401"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "error",
+                  "message": "Error while canceling friend request!"
+                }
+              }
+            }
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -553,6 +586,17 @@
           "401": {
             "$ref": "#/components/responses/401"
           },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "error",
+                  "message": "Error while accepting friend request!"
+                }
+              }
+            }
+          },
           "404": {
             "$ref": "#/components/responses/404"
           },
@@ -578,6 +622,17 @@
                 "example": {
                   "status": "success",
                   "data": "Friend request rejected successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "error",
+                  "message": "Error while rejecting friend request!"
                 }
               }
             }
@@ -694,12 +749,10 @@
     "/api/v1/friends/delete/{friendId}": {
       "delete": {
         "description": "Delete friend",
-        "summary":"Endpoint to delete a friend.",
+        "summary": "Endpoint to delete a friend.",
         "tags": ["Friends"],
         "operationId": "deleteFriend",
-        "security": [
-          { "BearerAuth": [] }
-        ],
+        "security": [{ "BearerAuth": [] }],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -714,6 +767,17 @@
           },
           "401": {
             "$ref": "#/components/responses/401"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "error",
+                  "message": "Error while deleting friend!"
+                }
+              }
+            }
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -732,9 +796,7 @@
         "description": "Create new conversation",
         "summary": "Endpoint to create a conversation",
         "tags": ["Conversations"],
-        "security": [
-          { "BearerAuth": [] }
-        ],
+        "security": [{ "BearerAuth": [] }],
         "requestBody": {
           "content": {
             "application/json": {
@@ -751,9 +813,7 @@
               "application/json": {
                 "example": {
                   "status": "success",
-                  "data": {
-
-                  }
+                  "data": {}
                 }
               }
             }

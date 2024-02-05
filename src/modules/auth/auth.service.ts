@@ -5,7 +5,7 @@ import { generateAccessToken } from "../../shared/utils/code-factor";
 import { SanitizeData } from "../../shared/utils/sanitize-data";
 import ApiError from "../../shared/utils/api-error";
 import { UserService } from "../users/user.service";
-import { IUser, SanitizedUser } from '../users/user.interface';
+import { IUser } from '../users/user.interface';
 
 export class AuthService implements IAuthService {
   private sanitizeData: SanitizeData;
