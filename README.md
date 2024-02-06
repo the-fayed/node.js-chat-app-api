@@ -66,6 +66,18 @@ After running the app on any environment(e.g. development)
 
 visit: `/api/docs` endpoint from full documentation with swagger.
 
+### Socket.io Events
+
+| Event Name     | Payload                           | Description                      |
+| -------------- | --------------------------------- | -------------------------------- |
+| connection     | userId                            | Connect to socket io server      |
+| sendMessage    | { senderId, receiverId, content } | Add a new post                   |
+| getMessage     | null                              | get message from socket          |
+| getOnlineUsers | null                              | Get all online users             |
+| disconnect     | null                              | disconnect from socket io server |
+
+> *note that all ids sent on payload are the database id of each user*
+
 ## License
 
 MIT License
