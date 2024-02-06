@@ -5,7 +5,7 @@ import { generateAccessToken } from "../../shared/utils/code-factor";
 import { SanitizeData } from "../../shared/utils/sanitize-data";
 import ApiError from "../../shared/utils/api-error";
 import { UserService } from "../users/user.service";
-import { IUser } from '../users/user.interface';
+import { IUser } from "../users/user.interface";
 
 export class AuthService implements IAuthService {
   private sanitizeData: SanitizeData;
@@ -17,7 +17,8 @@ export class AuthService implements IAuthService {
   }
 
   async signup(data: SignupData): Promise<AuthResponse> {
-      const user = await this.userService.createUser(data) as IUser;
+    try {
+      const user = (await this.userService.createUser(data)) as IUser;
       if (!user) {
         throw new ApiError("Error while creating your account, please try again later!", 500);
       }
@@ -26,9 +27,14 @@ export class AuthService implements IAuthService {
         user: this.sanitizeData.sanitizeUser(user),
         accessToken: token,
       };
+    } catch (error) {
+      console.log(error);
+      throw new ApiError("Error while retrieving data!", 500);
+    }
   }
 
   async login(data: LoginData): Promise<AuthResponse> {
+    try {
       // check if user exists
       const user = await this.userService.getUserByEmailOrUsername(data.emailOrUsername);
       if (!user) {
@@ -42,5 +48,9 @@ export class AuthService implements IAuthService {
       // preparing the response data
       const token = generateAccessToken({ userId: user.id });
       return { user: this.sanitizeData.sanitizeUser(user), accessToken: token };
+    } catch (error) {
+      console.log(error);
+      throw new ApiError("Error while retrieving data!", 500);
+    }
   }
 }
