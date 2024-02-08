@@ -1,0 +1,1228 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Rest Real-time chat API",
+        "version": "1.0.0",
+        "contact": {
+            "name": "Ahmed Fayed",
+            "email": "ll.ahmedfayed@gamil.com",
+            "url": "https://www.linkedin.com/in/ahmed-fayeed/"
+        }
+    },
+    "externalDocs": {
+        "description": "Find out more about project",
+        "url": "https://www.github.com/the-fayed/node.js-chat-app-api"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "localhost server"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Authentication endpoints."
+        },
+        {
+            "name": "Users",
+            "description": "Users Endpoints."
+        },
+        {
+            "name": "Friends",
+            "description": "Friendship related operations."
+        },
+        {
+            "name": "Conversations",
+            "description": "Conversation related operations."
+        },
+        {
+            "name": "Messages",
+            "description": "Messages related operations."
+        }
+    ],
+    "paths": {
+        "/api/v1/auth/signup": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "Sign up as new user",
+                "description": "Sign up",
+                "operationId": "signup",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/user-form-data"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/user-application-json"
+                            }
+                        },
+                        "required": true
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Signed up successfully",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "data": {
+                                        "id": "657e720637fc1d3b85ba07fe",
+                                        "username": "Example Username",
+                                        "avatar": "http://example.com"
+                                    },
+                                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWE4MTY1Nzk3NWZjZDY1MDk3YmVhYTUiLCJpYXQiOjE3MDY0NTk3NzIsImV4cCI6MTcwNjQ4ODU3Mn0.0HGm2MfjMg1DNe3gE2AtiRj579yOrnc353fxuqOb600"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "error",
+                                    "message": "Error while creating your account, please try again later!"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/login": {
+            "post": {
+                "summary": "User login API",
+                "tags": ["Auth"],
+                "description": "User login",
+                "operationId": "login",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "emailOrUsername": "example@example.com",
+                                "password": "password"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Logged in successfully",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "data": {
+                                        "id": "657e720637fc1d3b85ba07fe",
+                                        "username": "Example Username",
+                                        "avatar": "http://example.com"
+                                    },
+                                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWE4MTY1Nzk3NWZjZDY1MDk3YmVhYTUiLCJpYXQiOjE3MDY0NTk3NzIsImV4cCI6MTcwNjQ4ODU3Mn0.0HGm2MfjMg1DNe3gE2AtiRj579yOrnc353fxuqOb600"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/logged-user": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "Get logged user data API",
+                "description": "Get logged user data",
+                "operationId": "getLoggedUser",
+                "security": [{ "BearerAuth": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Get data successfully",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "data": {
+                                        "id": "example",
+                                        "username": "example",
+                                        "avatar": "http://example.com"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/api/v1/users": {
+            "get": {
+                "description": "Get All users - pagination, search, and sort is supported",
+                "summary": "get all users",
+                "operationId": "getAllUsers",
+                "tags": ["Users"],
+                "security": [{ "BearerAuth": [] }],
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "specify the page to retrieve",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "description": "specify how many items to retrieve",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "specify on what do you want to sort the results",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "search with specific keyword",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "paginationResult": {
+                                        "current": 2,
+                                        "numberOfPages": 10,
+                                        "next": 3,
+                                        "prev": 1
+                                    },
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "username": "Example Username",
+                                            "avatar": "http://example.com"
+                                        },
+                                        {
+                                            "id": 2,
+                                            "username": "Example Username",
+                                            "avatar": "http://example.com"
+                                        },
+                                        {
+                                            "id": 3,
+                                            "username": "Example Username",
+                                            "avatar": "http://example.com"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "username": "Example Username",
+                                            "avatar": "http://example.com"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{userId}": {
+            "get": {
+                "description": "Get specific user by id",
+                "summary": "Get user by id",
+                "operationId": "getUserById",
+                "tags": ["Users"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [{ "BearerAuth": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "data": {
+                                        "id": "657e720637fc1d3b85ba07fe",
+                                        "username": "Example Username",
+                                        "avatar": "http://example.com"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/update-data": {
+            "patch": {
+                "description": "Update logged user data",
+                "operationId": "updateUserData",
+                "tags": ["Users"],
+                "summary": "Endpoint to update the logged user's data.",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "$ref": "#/components/schemas/update-user-data-form-data"
+                        }
+                    },
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/update-user-data-application-json"
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "message": "Data updated successfully!",
+                                    "data": {
+                                        "id": "657e720637fc1d3b85ba07fe",
+                                        "username": "Example Username",
+                                        "avatar": "http://example.com"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/update-password": {
+            "patch": {
+                "description": "Update logged user password",
+                "summary": "Endpoint to update the logged user's password.",
+                "operationId": "updateUserPassword",
+                "tags": ["Users"],
+                "security": [{ "BearerAuth": [] }],
+                "requestBody": {
+                    "schema": {
+                        "$ref": "#/components/schemas/update-password"
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "message": "Password updated successfully!",
+                                    "data": {
+                                        "id": "657e720637fc1d3b85ba07fe",
+                                        "username": "Example Username",
+                                        "avatar": "http://example.com"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/delete-account": {
+            "delete": {
+                "description": "Delete logged user account",
+                "summary": "Endpoint to delete the logged user's account.",
+                "operationId": "deleteLoggedUser",
+                "tags": ["Users"],
+                "security": [{ "BearerAuth": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "message": "Account deleted successfully!"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{userId}/friends/friend-request": {
+            "post": {
+                "description": "Send friend request to a specific user",
+                "summary": "Sends a friend request from the authenticated user to another user.",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": ["Friends"],
+                "security": [{ "BearerAuth": [] }],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "data": "Friend request has been sent successfully!"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "error",
+                                    "message": "Error while sending friend request!"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Cancel friend request",
+                "summary": "Endpoint to cancel friend request",
+                "operationId": "cancelFriendRequest",
+                "security": [{ "BearerAuth": [] }],
+                "tags": ["Friends"],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "data": "Friend request has been canceled successfully!"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "error",
+                                    "message": "Error while canceling friend request!"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/api/v1/friends/{senderId}": {
+            "post": {
+                "description": "Accept friend request",
+                "operationId": "acceptFriendRequest",
+                "summary": "Endpoint to accept friend request",
+                "tags": ["Friends"],
+                "security": [{ "BearerAuth": [] }],
+                "parameters": [
+                    {
+                        "name": "senderId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "data": "Friend request accepted successfully!"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "error",
+                                    "message": "Error while accepting friend request!"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Reject friend request",
+                "summary": "Endpoint to reject friend request",
+                "operationId": "rejectFriendRequest",
+                "tags": ["Friends"],
+                "security": [{ "BearerAuth": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "data": "Friend request rejected successfully!"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "error",
+                                    "message": "Error while rejecting friend request!"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/api/v1/friends": {
+            "get": {
+                "description": "Get All friends",
+                "summary": "Endpoint to get all friends",
+                "operationId": "getAllFriends",
+                "tags": ["Friends"],
+                "security": [{ "BearerAuth": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "data": [
+                                        {
+                                            "id": "657e720637fc1d3b85ba07fe",
+                                            "username": "Example Username",
+                                            "avatar": "http://example.com"
+                                        },
+                                        {
+                                            "id": "657e720637fc1d3b85ba07fe",
+                                            "username": "Example Username",
+                                            "avatar": "http://example.com"
+                                        },
+                                        {
+                                            "id": "657e720637fc1d3b85ba07fe",
+                                            "username": "Example Username",
+                                            "avatar": "http://example.com"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "204": {
+                        "$ref": "#/components/responses/204"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/api/v1/friends/friend-requests": {
+            "get": {
+                "description": "Get all friend requests",
+                "summary": "Endpoint to get all friend requests",
+                "operationId": "getAllFriendRequests",
+                "tags": ["Friends"],
+                "security": [{ "BearerAuh": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "data": [
+                                        {
+                                            "id": "657e720637fc1d3b85ba07fe",
+                                            "username": "Example Username",
+                                            "avatar": "http://example.com"
+                                        },
+                                        {
+                                            "id": "657e720637fc1d3b85ba07fe",
+                                            "username": "Example Username",
+                                            "avatar": "http://example.com"
+                                        },
+                                        {
+                                            "id": "657e720637fc1d3b85ba07fe",
+                                            "username": "Example Username",
+                                            "avatar": "http://example.com"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "$ref": "#/components/responses/204"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/api/v1/friends/delete/{friendId}": {
+            "delete": {
+                "description": "Delete friend",
+                "summary": "Endpoint to delete a friend.",
+                "tags": ["Friends"],
+                "operationId": "deleteFriend",
+                "security": [{ "BearerAuth": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "data": "Friend deleted successfully!"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "error",
+                                    "message": "Error while deleting friend!"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/api/v1/conversations": {
+            "post": {
+                "description": "Create new conversation",
+                "summary": "Endpoint to create a conversation",
+                "tags": ["Conversations"],
+                "security": [{ "BearerAuth": [] }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "receiverId": "657e720637fc1d3b85ba07fe"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "data": {
+                                        "members": ["65a812f2a136d5123193ecc8", "65ab87d1e84386a80d03f959"],
+                                        "_id": "65c0adce80ff0252108ab9a3",
+                                        "createdAt": "2024-02-05T09:43:42.889Z",
+                                        "updatedAt": "2024-02-05T09:43:42.889Z",
+                                        "__v": 0
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "error",
+                                    "message": "You can only start conversations with your friends!"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            },
+            "get": {
+                "description": "Get All conversations",
+                "operationId": "getConversations",
+                "summary": "get all conversations for the logged user",
+                "tags": ["Conversations"],
+                "security": [{ "BearerAuth": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "paginationResult": {
+                                        "numberOfPages": 10,
+                                        "current": 2,
+                                        "next": 3,
+                                        "prev": 1
+                                    },
+                                    "data": [
+                                        {
+                                            "members": ["65a812f2a136d5123193ecc8", "65ab87d1e84386a80d03f959"],
+                                            "_id": "65c0adce80ff0252108ab9a3",
+                                            "createdAt": "2024-02-05T09:43:42.889Z",
+                                            "updatedAt": "2024-02-05T09:43:42.889Z",
+                                            "__v": 0
+                                        },
+                                        {
+                                            "members": ["65a812f2a136d5123193ecc8", "65ab87d1e84386a80d03f959"],
+                                            "_id": "65c0adce80ff0252108ab9a3",
+                                            "createdAt": "2024-02-05T09:43:42.889Z",
+                                            "updatedAt": "2024-02-05T09:43:42.889Z",
+                                            "__v": 0
+                                        },
+                                        {
+                                            "members": ["65a812f2a136d5123193ecc8", "65ab87d1e84386a80d03f959"],
+                                            "_id": "65c0adce80ff0252108ab9a3",
+                                            "createdAt": "2024-02-05T09:43:42.889Z",
+                                            "updatedAt": "2024-02-05T09:43:42.889Z",
+                                            "__v": 0
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "$ref": "#/components/responses/204"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        },
+        "/api/v1/conversations/{conversationId}/messages": {
+            "post": {
+                "description": "Send new message on specific conversation",
+                "summary": "Send new message on specific conversation",
+                "tags": ["Messages"],
+                "operationId": "createNewMessage",
+                "security": [
+                    { "BearerAuth": [] }
+                ],
+                "parameters": [
+                    {
+                        "name": "conversationId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "content": "Hello, there!"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "data": {
+                                        "senderId": "65a812f2a136d5123193ecc8",
+                                        "conversationId": "65c0adce80ff0252108ab9a3",
+                                        "content": "Hello there!",
+                                        "_id": "65c1077d1f4ec34f83c9e2a8",
+                                        "createdAt": "2024-02-05T16:06:21.776Z",
+                                        "updatedAt": "2024-02-05T16:06:21.776Z",
+                                        "__v": 0
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/409"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            },
+            "get": {
+                "description": "Get all messages in specific conversation",
+                "summary": "Get all messages in specific conversation",
+                "tags": ["Messages"],
+                "operationId": "getMessageListByConversationID",
+                "security": [
+                    { "BearerAuth": [] }
+                ],
+                "parameters": [
+                    {
+                        "name": "conversationId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": "success",
+                                    "paginationResult": {
+                                        "numberOfPages": 10,
+                                        "current": 3,
+                                        "next": 4,
+                                        "prev": 2
+                                    },
+                                    "data": [
+                                        {
+                                            "senderId": "65a812f2a136d5123193ecc8",
+                                            "conversationId": "65c0adce80ff0252108ab9a3",
+                                            "content": "Hello there!",
+                                            "_id": "65c1077d1f4ec34f83c9e2a8",
+                                            "createdAt": "2024-02-05T16:06:21.776Z",
+                                            "updatedAt": "2024-02-05T16:06:21.776Z",
+                                            "__v": 0
+                                        },
+                                        {
+                                            "senderId": "65a812f2a136d5123193ecc8",
+                                            "conversationId": "65c0adce80ff0252108ab9a3",
+                                            "content": "Hello there!",
+                                            "_id": "65c1077d1f4ec34f83c9e2a8",
+                                            "createdAt": "2024-02-05T16:06:21.776Z",
+                                            "updatedAt": "2024-02-05T16:06:21.776Z",
+                                            "__v": 0
+                                        },
+                                        {
+                                            "senderId": "65a812f2a136d5123193ecc8",
+                                            "conversationId": "65c0adce80ff0252108ab9a3",
+                                            "content": "Hello there!",
+                                            "_id": "65c1077d1f4ec34f83c9e2a8",
+                                            "createdAt": "2024-02-05T16:06:21.776Z",
+                                            "updatedAt": "2024-02-05T16:06:21.776Z",
+                                            "__v": 0
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "$ref": "#/components/responses/204"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "user-form-data": {
+                "required": ["username", "email", "password", "passwordConfirmation"],
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": "visible user name",
+                        "example": "Ahmed Fayed"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "User email",
+                        "example": "user@gmail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "User password",
+                        "example": "Aa@12345678"
+                    },
+                    "passwordConfirmation": {
+                        "type": "string",
+                        "description": "Password Confirmation",
+                        "example": "Aa@12345678"
+                    },
+                    "avatar": {
+                        "type": "file",
+                        "contentMediaType": "image/png, image/jpg, image/jpeg",
+                        "contentEncoding": "base64",
+                        "description": "User visible avatar"
+                    }
+                }
+            },
+            "user-application-json": {
+                "required": ["username", "email", "password", "passwordConfirmation"],
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": "visible user name",
+                        "example": "Ahmed Fayed"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "User email",
+                        "example": "user@gmail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "User password",
+                        "example": "Aa@12345678"
+                    },
+                    "passwordConfirmation": {
+                        "type": "string",
+                        "description": "Password Confirmation",
+                        "example": "Aa@12345678"
+                    }
+                }
+            },
+            "update-user-data-form-data": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": "visible user name",
+                        "example": "Ahmed Fayed"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "User email",
+                        "example": "user@gmail.com"
+                    },
+                    "avatar": {
+                        "type": "file",
+                        "contentMediaType": "image/png, image/jpg, image/jpeg",
+                        "contentEncoding": "base64",
+                        "description": "User visible avatar"
+                    }
+                }
+            },
+            "update-user-data-application-json": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": "visible user name",
+                        "example": "Ahmed Fayed"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "User email",
+                        "example": "user@gmail.com"
+                    }
+                }
+            },
+            "update-password": {
+                "required": ["username", "email", "password", "passwordConfirmation"],
+                "type": "object",
+                "properties": {
+                    "currentPassword": {
+                        "type": "string",
+                        "description": "User current password",
+                        "example": "As@12345678"
+                    },
+                    "newPassword:": {
+                        "type": "string",
+                        "description": "User's new password",
+                        "example": "Aa@12345678"
+                    },
+                    "newPasswordConfirmation": {
+                        "type": "string",
+                        "description": "Password Confirmation",
+                        "example": "Aa@12345678"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "Bearer Token Authentication"
+            }
+        },
+        "responses": {
+            "204": {
+                "description": "No content"
+            },
+            "401": {
+                "description": "Unauthorized error",
+                "content": {
+                    "application/json": {
+                        "example": {
+                            "status": "error",
+                            "message": "You are not authorized to preform this action!"
+                        }
+                    }
+                }
+            },
+            "404": {
+                "description": "Not found",
+                "content": {
+                    "application/json": {
+                        "example": {
+                            "status": "error",
+                            "message": "Not found!"
+                        }
+                    }
+                }
+            },
+            "409": {
+                "description": "Conflict error",
+                "content": {
+                    "application/json": {
+                        "example": {
+                            "status": "error",
+                            "errors": [
+                                {
+                                    "type": "field",
+                                    "value": "email@email.com",
+                                    "msg": "Email already in use!",
+                                    "path": "email",
+                                    "location": "body"
+                                },
+                                {
+                                    "type": "field",
+                                    "value": "user name",
+                                    "msg": "Unavailable username!",
+                                    "path": "username",
+                                    "location": "body"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "500": {
+                "description": "Internal server error",
+                "content": {
+                    "application/json": {
+                        "example": {
+                            "status": "fail",
+                            "message": "some sort of message"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
