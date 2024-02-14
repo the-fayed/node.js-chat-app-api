@@ -12,11 +12,9 @@ import { routesMounter } from '../modules/routes-mounter';
 import { dbConnection } from '../config/db-connection';
 import ApiError from '../shared/utils/api-error';
 import swaggerDocs from '../../swagger.json';
-import io from "./socket-io";
 
 
 const app: express.Application = express();
-const socketPort: number = parseInt(process.env.SOCKET_PORT as string) || 8900;
 dbConnection();
 
 /**
@@ -76,9 +74,6 @@ const opts = {
 };
 
 app.use('/api-docs', serve, setup(swaggerDocs, opts))
-
-// init socket server
-io.listen(socketPort);
 
 // handling not implemented routes
 app.use('*', (req, res, next) => {

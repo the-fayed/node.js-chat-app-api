@@ -1,10 +1,8 @@
-import { createServer } from 'http';
-
 import { Server } from "socket.io";
 
 import { OnlineUserService } from "../modules/online-users/online-user.service";
 import { ISocketMessage } from "../modules/online-users/online-user.interface";
-import app from "./app";
+import server from './server';
 
 const onlineUserService = new OnlineUserService();
 
@@ -14,7 +12,6 @@ async function getAllOnlineUsers() {
 }
 
 // init socket.io server
-const server = createServer(app);
 const io = new Server(server);
 
 io.on("connection", async (socket) => {
