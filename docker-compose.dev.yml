@@ -1,0 +1,34 @@
+version: "3"
+services:
+  mongo_db:
+    container_name: db_container
+    image: mongo:latest
+    restart: always
+    volumes:
+      - mongo_db:/data/db
+
+  chat-app:
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=Development
+      - MONGO_URI=mongodb://mongo_db:27017/express-chat-app-api
+      - ./.env
+    depends_on:
+      - mongo_db
+    command: ["npm", "run", "start:dev"]
+
+  nginx:
+    image: nginx
+    ports:
+      - 8080:8080
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.g/default.conf
+    depends_on:
+      - chat-app
+
+volumes:
+  mongo_db: {}

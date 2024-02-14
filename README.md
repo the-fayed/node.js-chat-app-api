@@ -37,7 +37,6 @@ Finally, create .env file in project's root directory and specify the environmen
 BASEURL = "http://localhost:3000"
 NODE_ENV = "Development"
 APP_PORT = "3000"
-SOCKET_PORT = "8900"
 
 # MONGO
 MONGO_URI =
@@ -62,9 +61,9 @@ CLOUDINARY_API_SECRET =
 
 ## End Points
 
-After running the app on any environment(e.g. development)
+After running the app on development environment,
 
-visit: `/api/docs` endpoint from full documentation with swagger.
+visit: `/api-docs` endpoint from full documentation with swagger.
 
 ### Socket.io Events
 
